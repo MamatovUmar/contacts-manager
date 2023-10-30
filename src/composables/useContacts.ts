@@ -4,13 +4,7 @@ import { ref } from 'vue'
 import { uuid } from 'vue3-uuid'
 
 export const useContacts = () => {
-    const list = ref<ContactItem[]>([])
-    const tags = new Set<keyof Tags>()
-
-    list.value = contactList.map(el => {
-        el.tags.forEach(tag => tags.add(tag))
-        return el
-    })
+    const list = ref<ContactItem[]>(contactList)
 
     const addContact = (data: ContactForm) => {
         list.value.push({
@@ -35,7 +29,6 @@ export const useContacts = () => {
 
     return {
         list,
-        usedTags: Array.from(tags) as string[],
         tagsList,
         removeContact,
         editContact,

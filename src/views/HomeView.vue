@@ -5,6 +5,7 @@ import SearchInput from '@/components/ui/SearchInput.vue'
 import {computed, ref} from 'vue'
 
 import type { ContactItem } from "@/types/contact";
+import TagsFilter from "@/components/TagsFilter.vue";
 import { useContacts } from "@/composables/useContacts";
 
 const contacts = useContacts()
@@ -33,28 +34,13 @@ const filteredContacts = computed<ContactItem[]>(() => {
 </script>
 
 <template>
-  <main>
+  <main class="home">
     <AppHeader title="Список контактов" />
 
     <div class="container">
       <SearchInput v-model="search" />
 
-      <div class="tags">
-        <div
-          :class="['tag', { active: selectedTag === '' }]"
-          @click="selectedTag = ''"
-        >
-          Все
-        </div>
-        <div
-          :class="['tag', { active: tag === selectedTag }]"
-          v-for="tag of contacts.usedTags"
-          :key="tag"
-          @click="selectedTag = tag"
-        >
-          {{ contacts.tagsList[tag] }}
-        </div>
-      </div>
+      <TagsFilter v-model="selectedTag"/>
 
       <transition-group name="list" tag="section" class="contacts">
         <ContactCard
@@ -91,25 +77,5 @@ const filteredContacts = computed<ContactItem[]>(() => {
   text-align: center;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
 
-  .tag {
-    border: 1px solid var(--border-color);
-    border-radius: var(--base-border-radius);
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    font-size: 14px;
-    transition: 0.2s;
-
-    &:hover, &.active {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-    }
-  }
-}
 </style>
