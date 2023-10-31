@@ -10,7 +10,7 @@ import { useContacts } from '@/composables/useContacts'
 import CustomMultipleSelect from '@/components/ui/CustomMultipleSelect.vue'
 
 const { addContact, tagOptions } = useContacts()
-const isOpen = ref(true)
+const isOpen = ref(false)
 const isValidForm = ref(false)
 const form = reactive<ContactForm>({
   fio: '',
@@ -30,8 +30,12 @@ const validateForm = (valid: boolean) => {
 }
 
 const submitForm = () => {
-  console.log(form)
   addContact(form)
+  isOpen.value = false
+  form.fio = ''
+  form.phone = ''
+  form.email = ''
+  form.tags = []
 }
 
 </script>

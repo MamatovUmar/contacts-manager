@@ -4,7 +4,7 @@ import {reactive, ref} from 'vue';
 import type { SelectOption } from '@/types/form'
 import { tagsList } from '@/constants'
 import {computed, inject} from 'vue'
-import {FormRules} from '@/types/form'
+import type { FormRules } from '@/types/form'
 
 const {
   modelValue,
@@ -19,7 +19,7 @@ const {
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', val: string[])
+  (e: 'update:modelValue', val: string[]): void
 }>()
 
 const validateHandle = inject('validateHandle') as (field: string, valid: boolean) => void
@@ -28,10 +28,10 @@ const errorMessage = ref<string>('')
 const openDropdown = ref(false)
 const selectedOptions = reactive(new Set())
 
-const follow = computed(() => {
+const follow = computed<string[]>(() => {
   if (!prop) return []
   if (!rules.hasOwnProperty(prop)) return []
-  return rules[prop]
+  return rules[prop as keyof typeof rules]
 })
 
 const validate = (size: number) => {
@@ -40,7 +40,7 @@ const validate = (size: number) => {
   } else {
     errorMessage.value = ''
   }
-  validateHandle?.(prop, !errorMessage.value)
+  if (prop) validateHandle?.(prop, !errorMessage.value)
 }
 
 const selectOption = (option: string) => {
@@ -67,7 +67,7 @@ const selectOption = (option: string) => {
         v-for="tag of selectedOptions"
         :key="`tag-${tag}`"
       >
-        {{ tagsList[tag] }}
+        {{ tagsList[tag as string] }}
       </span>
     </div>
     <div v-if="errorMessage" class="select__hint">

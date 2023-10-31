@@ -24,10 +24,10 @@ const validateHandle = inject('validateHandle') as (field: string, valid: boolea
 const rules = inject<FormRules>('rules') || {}
 const errorMessage = ref<string>('')
 
-const follow = computed(() => {
+const follow = computed<string[]>(() => {
   if (!prop) return []
   if (!rules.hasOwnProperty(prop)) return []
-  return rules[prop]
+  return rules[prop as keyof typeof rules]
 })
 
 const onInput = (event: Event) => {
@@ -51,7 +51,7 @@ const validate = (val: string) => {
   } else {
     errorMessage.value = ''
   }
-  validateHandle?.(prop, !errorMessage.value)
+  if (prop) validateHandle?.(prop, !errorMessage.value)
 }
 </script>
 
