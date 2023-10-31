@@ -5,25 +5,21 @@ const { modelValue } = defineProps<{
   modelValue: string
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
-
 </script>
 
 <template>
   <div class="tags">
     <div
       :class="['tag', { active: modelValue === '' }]"
-      @click="emit('update:modelValue', '')"
+      @click="$emit('update:modelValue', '')"
     >
       Все
     </div>
     <div
-      :class="['tag', { active: tag === modelValue }]"
       v-for="(tag, key) in tagsList"
       :key="key"
-      @click="emit('update:modelValue', String(key))"
+      :class="['tag', { active: String(key) === modelValue }]"
+      @click="$emit('update:modelValue', String(key))"
     >
       {{ tag }}
     </div>
