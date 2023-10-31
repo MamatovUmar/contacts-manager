@@ -1,25 +1,34 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {ref, inject, computed} from 'vue'
+import type {FormRules} from '@/types/form'
 
 const {
   label,
   modelValue,
+  prop,
   type = 'text',
-  required = false
 } = defineProps<{
   label?: string
   placeholder?: string
   modelValue: string | number
   type?: string
-  required: boolean
+  prop?: string
 }>()
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void
 }>()
 
+const validateHandle = inject('validateHandle') as (field: string, valid: boolean) => void
+const rules = inject<FormRules>('rules') || {}
 const errorMessage = ref<string>('')
+
+const follow = computed(() => {
+  if (!prop) return []
+  if (!rules.hasOwnProperty(prop)) return []
+  return rules[prop]
+})
 
 const onInput = (event: Event) => {
   const val = (event.target as HTMLInputElement).value
@@ -34,15 +43,15 @@ const onFocusOut = (event: Event) => {
 }
 
 const validate = (val: string) => {
-  if (required && !val) {
+  if (follow.value.includes('required') && !val) {
     errorMessage.value = 'Обязательное поле'
-  } else if (type === 'email') {
+  } else if (type === 'email' || follow.value.includes('email')) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     errorMessage.value = re.test(val.toLowerCase()) ? '' : 'Введите правильную почту'
-    console.log(re.test(val.toLowerCase()), errorMessage.value)
   } else {
     errorMessage.value = ''
   }
+  validateHandle?.(prop, !errorMessage.value)
 }
 </script>
 
