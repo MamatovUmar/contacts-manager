@@ -2,7 +2,7 @@ export interface ContactForm {
     fio: string
     phone: string
     email: string
-    tags: (keyof Tags)[]
+    tags: string[]
 }
 
 export interface ContactItem extends ContactForm {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ref, inject, computed} from 'vue'
+import {ref, inject, computed, onMounted} from 'vue'
 import type {FormRules} from '@/types/form'
 
 const {
@@ -53,6 +53,10 @@ const validate = (val: string) => {
   }
   if (prop) validateHandle?.(prop, !errorMessage.value)
 }
+
+onMounted(() => {
+  if (modelValue) validate(modelValue as string)
+})
 </script>
 
 <template>

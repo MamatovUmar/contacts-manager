@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref, watch, watchEffect} from 'vue';
 import type { SelectOption } from '@/types/form'
 import { tagsList } from '@/constants'
-import {computed, inject} from 'vue'
+import { computed, inject } from 'vue'
 import type { FormRules } from '@/types/form'
 
 const {
@@ -34,6 +34,10 @@ const follow = computed<string[]>(() => {
   return rules[prop as keyof typeof rules]
 })
 
+watchEffect(() => {
+  modelValue.forEach(item => selectedOptions.add(item))
+})
+
 const validate = (size: number) => {
   if (follow.value.includes('required') && size === 0) {
     errorMessage.value = 'Обязательное поле'
@@ -52,6 +56,10 @@ const selectOption = (option: string) => {
   emit('update:modelValue', Array.from(selectedOptions) as string[])
   validate(selectedOptions.size)
 }
+
+onMounted(() => {
+  if (modelValue.length) validate(selectedOptions.size)
+})
 </script>
 
 <template>

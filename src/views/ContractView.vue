@@ -6,6 +6,7 @@ import { onMounted, ref } from "vue";
 import type {ContactItem} from "@/types/contact";
 import ContactCard from "@/components/ContactCard.vue";
 import CustomButton from "@/components/ui/CustomButton.vue";
+import CreateNewContact from "@/components/CreateNewContact.vue";
 
 const { getContact, removeContact } = useContacts()
 const route = useRoute()
@@ -18,15 +19,17 @@ const deleteContactHandler = () => {
   router.go(-1)
 }
 
-onMounted(() => {
-  try {
-    contact.value = getContact(route.params.id as string)
-  } catch (e) {
-    console.log(e)
+const contactHandler = () => {
+  contact.value = getContact(route.params.id as string)
+  if (!contact.value) {
+    router.go(-1)
   }
+}
+
+
+onMounted(() => {
+  contactHandler()
 })
-
-
 </script>
 
 <template>
@@ -39,9 +42,10 @@ onMounted(() => {
           <CustomButton @click="deleteContactHandler">
             Удалить
           </CustomButton>
-          <CustomButton type="primary">
-            Редактировать
-          </CustomButton>
+          <CreateNewContact
+            :edit-data="contact"
+            @update="contactHandler"
+          />
         </template>
       </ContactCard>
     </div>

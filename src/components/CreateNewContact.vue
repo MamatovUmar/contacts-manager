@@ -1,15 +1,23 @@
 <script setup lang="ts">
 
 import CustomModal from '@/components/ui/CustomModal.vue'
-import {reactive, ref} from 'vue'
-import type { ContactForm } from '@/types/contact'
+import {onMounted, reactive, ref} from 'vue'
+import type {ContactForm, ContactItem} from '@/types/contact'
 import CustomInput from '@/components/ui/CustomInput.vue'
 import CustomButton from '@/components/ui/CustomButton.vue'
 import CustomForm from '@/components/ui/CustomForm.vue'
 import { useContacts } from '@/composables/useContacts'
 import CustomMultipleSelect from '@/components/ui/CustomMultipleSelect.vue'
 
-const { addContact, tagOptions } = useContacts()
+const { editData } = defineProps<{
+  editData?: ContactItem
+}>()
+
+const emit = defineEmits<{
+  (e: 'update'): void
+}>()
+
+const { addContact, tagOptions, editContact } = useContacts()
 const isOpen = ref(false)
 const isValidForm = ref(false)
 const form = reactive<ContactForm>({
@@ -30,20 +38,38 @@ const validateForm = (valid: boolean) => {
 }
 
 const submitForm = () => {
-  addContact(form)
+  if (editData) {
+    editContact({
+      ...form,
+      id: editData.id
+    })
+    emit('update')
+  } else {
+    addContact(form)
+    form.fio = ''
+    form.phone = ''
+    form.email = ''
+    form.tags = []
+  }
   isOpen.value = false
-  form.fio = ''
-  form.phone = ''
-  form.email = ''
-  form.tags = []
 }
+
+onMounted(() => {
+  if (editData) {
+    form.fio = editData.fio
+    form.email = editData.email
+    form.phone = editData.phone
+    form.tags = editData.tags
+    isValidForm.value = true
+  }
+})
 
 </script>
 
 <template>
   <div class="new-contact">
-    <CustomButton @click="isOpen = true">
-      Создать контакт
+    <CustomButton type="primary" @click="isOpen = true">
+      {{ editData ? 'Редактировать' : 'Создать контакт' }}
     </CustomButton>
 
     <CustomModal
