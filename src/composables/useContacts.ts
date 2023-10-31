@@ -14,6 +14,10 @@ export const useContacts = () => {
         })
     }
 
+    const getContact = (id: string) => {
+        return list.value.find(el => el.id === id)
+    }
+
     const editContact = (data: ContactItem) => {
         const index = list.value.findIndex(el => el.id === data.id)
         if (index !== -1) {
@@ -36,6 +40,7 @@ export const useContacts = () => {
         removeContact,
         editContact,
         addContact,
-        tagOptions
+        tagOptions,
+        getContact
     }
 }

@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import type { ContactItem } from "@/types/contact";
-import { useContacts } from "@/composables/useContacts";
+import type { ContactItem } from '@/types/contact'
+import { useContacts } from '@/composables/useContacts'
+import { useRouter } from 'vue-router'
 
 const { tagsList } = useContacts()
+const router = useRouter()
 
-const { contact } = defineProps<{
+const { contact, disable = false } = defineProps<{
   contact: ContactItem
+  disable?: boolean
 }>()
 
 </script>
 
 <template>
-<div class="card">
+<div
+  :class="['card', { disable }]"
+  @click="router.push(`/${contact.id}`)"
+>
   <div class="card__header">
     <div class="card__fio">{{ contact.fio }}</div>
     <div class="card__actions"></div>
@@ -34,6 +40,12 @@ const { contact } = defineProps<{
       </span>
     </div>
   </div>
+
+  <template v-if="$slots.footer">
+    <div class="card__footer">
+      <slot name="footer" />
+    </div>
+  </template>
 </div>
 </template>
 
@@ -41,11 +53,18 @@ const { contact } = defineProps<{
 .card {
   border: 1px solid var(--border-color);
   border-radius: var(--base-border-radius);
-  cursor: pointer;
   transition: 0.3s;
 
-  &:hover {
+  &:not(.disable):hover {
     box-shadow: var(--box-shadow);
+    cursor: pointer;
+  }
+
+  &__footer {
+    border-top: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    gap: 20px;
   }
 
   &__header {
