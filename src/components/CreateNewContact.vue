@@ -37,6 +37,13 @@ const validateForm = (valid: boolean) => {
   isValidForm.value = valid
 }
 
+const resetForm = () => {
+  form.fio = ''
+  form.phone = ''
+  form.email = ''
+  form.tags = []
+}
+
 const submitForm = () => {
   if (editData) {
     editContact({
@@ -46,10 +53,7 @@ const submitForm = () => {
     emit('update')
   } else {
     addContact(form)
-    form.fio = ''
-    form.phone = ''
-    form.email = ''
-    form.tags = []
+    resetForm()
   }
   isOpen.value = false
 }
@@ -119,13 +123,9 @@ onMounted(() => {
           :disabled="!isValidForm"
           @click="submitForm"
         >
-          Создать
+          {{ editData ? 'Сохранить' : 'Создать' }}
         </CustomButton>
       </template>
     </CustomModal>
   </div>
 </template>
-
-<style scoped lang="scss">
-
-</style>
