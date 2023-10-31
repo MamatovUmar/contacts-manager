@@ -10,7 +10,6 @@ import CreateNewContact from '@/components/CreateNewContact.vue'
 import CustomInput from '@/components/ui/CustomInput.vue'
 
 const contacts = useContacts()
-console.log(contacts)
 
 const search = ref<string>('')
 const selectedTag = ref<string>('')
@@ -53,9 +52,9 @@ const filteredContacts = computed<ContactItem[]>(() => {
 
       <transition-group name="list" tag="section" class="contacts">
         <ContactCard
-            v-for="(contact, index) of filteredContacts"
-            :key="index"
-            :contact="contact"
+          v-for="(contact, index) of filteredContacts"
+          :key="index"
+          :contact="contact"
         />
       </transition-group>
 
