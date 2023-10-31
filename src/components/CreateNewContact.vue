@@ -7,8 +7,9 @@ import CustomInput from '@/components/ui/CustomInput.vue'
 import CustomButton from '@/components/ui/CustomButton.vue'
 import CustomForm from '@/components/ui/CustomForm.vue'
 import { useContacts } from '@/composables/useContacts'
+import CustomMultipleSelect from '@/components/ui/CustomMultipleSelect.vue'
 
-const { addContact } = useContacts()
+const { addContact, tagOptions } = useContacts()
 const isOpen = ref(true)
 const isValidForm = ref(false)
 const form = reactive<ContactForm>({
@@ -20,7 +21,8 @@ const form = reactive<ContactForm>({
 const rules = reactive({
   fio: ['required'],
   email: ['required', 'email'],
-  phone: ['required']
+  phone: ['required'],
+  tags: ['required']
 })
 
 const validateForm = (valid: boolean) => {
@@ -28,6 +30,7 @@ const validateForm = (valid: boolean) => {
 }
 
 const submitForm = () => {
+  console.log(form)
   addContact(form)
 }
 
@@ -66,6 +69,13 @@ const submitForm = () => {
           label="Номер телефона"
           v-model="form.phone"
           prop="phone"
+        />
+
+        <CustomMultipleSelect
+          label="Выберить тег"
+          v-model="form.tags"
+          prop="tags"
+          :options="tagOptions"
         />
       </CustomForm>
 

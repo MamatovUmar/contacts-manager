@@ -2,6 +2,7 @@ import { contactList, tagsList } from '@/constants'
 import type { ContactForm, ContactItem } from '@/types/contact'
 import { ref } from 'vue'
 import { uuid } from 'vue3-uuid'
+import type {SelectOption} from "@/types/form";
 
 export const useContacts = () => {
     const list = ref<ContactItem[]>(contactList)
@@ -27,11 +28,14 @@ export const useContacts = () => {
         }
     }
 
+    const tagOptions: SelectOption[] = Object.entries(tagsList).map(([value, label]) => ({value, label}))
+
     return {
         list,
         tagsList,
         removeContact,
         editContact,
-        addContact
+        addContact,
+        tagOptions
     }
 }
