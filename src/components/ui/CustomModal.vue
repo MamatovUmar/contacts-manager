@@ -26,9 +26,12 @@ const emit = defineEmits<{
         <div class="modal__body">
           <slot></slot>
         </div>
-        <div class="modal__footer">
-          <button @click="emit('close')">Close</button>
-        </div>
+
+        <template v-if="$slots.footer">
+          <div class="modal__footer">
+            <slot name="footer" />
+          </div>
+        </template>
       </div>
     </div>
   </transition>
@@ -84,7 +87,7 @@ const emit = defineEmits<{
 
   &__footer {
     border-top: 1px solid var(--border-color);
-    padding: 10px 20px;
+    padding: 20px;
     display: flex;
     justify-content: flex-end;
     gap: 20px;

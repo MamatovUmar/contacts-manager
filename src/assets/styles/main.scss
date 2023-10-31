@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap');
-@import "normalize.css";
-@import "vars";
+@import 'normalize.css';
+@import 'vars';
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -17,4 +17,25 @@ body {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+}
+
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.w-100 {
+  width: 100%;
 }

@@ -1,5 +1,5 @@
 import { contactList, tagsList } from '@/constants'
-import type { ContactForm, ContactItem, Tags } from '@/types/contact'
+import type { ContactForm, ContactItem } from '@/types/contact'
 import { ref } from 'vue'
 import { uuid } from 'vue3-uuid'
 
@@ -7,7 +7,7 @@ export const useContacts = () => {
     const list = ref<ContactItem[]>(contactList)
 
     const addContact = (data: ContactForm) => {
-        list.value.push({
+        list.value.unshift({
             ...data,
             id: uuid.v4()
         })

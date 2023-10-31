@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import AppHeader from '@/components/AppHeader.vue'
 import ContactCard from '@/components/ContactCard.vue'
-import SearchInput from '@/components/ui/SearchInput.vue'
 import {computed, ref} from 'vue'
 
-import type { ContactItem } from "@/types/contact";
-import TagsFilter from "@/components/TagsFilter.vue";
-import { useContacts } from "@/composables/useContacts";
+import type { ContactItem } from '@/types/contact'
+import TagsFilter from '@/components/TagsFilter.vue'
+import { useContacts } from '@/composables/useContacts'
+import CreateNewContact from '@/components/CreateNewContact.vue'
+import CustomInput from '@/components/ui/CustomInput.vue'
 
 const contacts = useContacts()
 console.log(contacts)
@@ -38,7 +39,15 @@ const filteredContacts = computed<ContactItem[]>(() => {
     <AppHeader title="Список контактов" />
 
     <div class="container">
-      <SearchInput v-model="search" />
+      <div class="home__actions">
+        <CustomInput
+          v-model="search"
+          class="w-100"
+          placeholder="Поиск по контактам"
+        />
+
+        <CreateNewContact />
+      </div>
 
       <TagsFilter v-model="selectedTag"/>
 
@@ -58,19 +67,18 @@ const filteredContacts = computed<ContactItem[]>(() => {
 </template>
 
 <style lang="scss" scoped>
+.home {
+  &__actions {
+    display: flex;
+    gap: 20px;
+  }
+}
+
 .contacts {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-bottom: 40px;
-}
-
-.list-enter-active, .list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from, .list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
 }
 
 .empty-result {
